@@ -1,0 +1,26 @@
+name: Baseline Security Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  baseline-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: ZAP Baseline Scan
+      uses: zaproxy/action-baseline@v0.13.0
+      with:
+        target: 'http://your-app-url'  # アプリケーションのURL
+        format: 'html'                 # レポートのフォーマット (例: html, xml, json)
+        output: 'zap-report.html'      # レポートの出力ファイル
+
+    - name: Upload ZAP report artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: zap-report
+        path: zap-report.html
